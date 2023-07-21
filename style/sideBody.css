@@ -1,0 +1,417 @@
+.filter-box-container-small {
+    grid-area: 333 / 33/ 380/ 552;
+  }
+  
+  .filter-box-container-small2 {
+    grid-area: 333 / 1367/ 380/ 1885;
+  }
+
+.filter-box-container-small, .filter-box-container-small2 {
+    background: rgba(134, 183, 228, 0.1);
+    border: 1px solid #63d4ff;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    color: #26c5d1;
+    font-size: small;
+}
+
+.label-container {
+  display: flex;
+}
+
+#label-containerA {
+    grid-area: 390/ 33/ 421/ 552;
+}
+
+#label-containerB {
+    grid-area: 610/ 33/ 641/ 552;
+}
+
+#label-containerC {
+    grid-area: 829/ 33/ 860/ 552;
+}
+
+#label-containerD {
+    grid-area: 390/ 1367/ 421/ 1886;
+}
+
+#label-containerE {
+    grid-area: 610/ 1367/ 641/ 1886;
+}
+
+#label-containerF {
+    grid-area: 829/ 1367/ 860/ 1886;
+}
+
+.number-box {
+  width: 6%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  position: relative;
+}
+
+.color-overlay {
+  background: linear-gradient(to top right, #B7E9F7, #00ECFA); 
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  position: absolute;
+}
+
+.label-box {
+  width: 94%;
+  height: 100%;
+  background: rgba(134, 183, 228, 0.2); 
+     display: flex;
+}
+
+.english-machine-title {
+    width: 30%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #63d4ff;
+  font-size: 100%;
+}
+
+.korean-machine-title {
+    width: 60%;
+  height: 100%;
+  color: #26c5d1;
+  display: flex;
+  align-items: center;
+  font-size: 80%;
+  padding-top: 2px;
+}
+
+.dot-signal {
+    width: 10%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+ .temp-circle {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: solid 2px black;
+}
+
+.temp-circle-normal {
+    background: rgb(0, 255, 0);
+  animation: blinkingCircle 3s infinite; 
+}
+
+  @keyframes blinkingCircle {
+      0%		{ background-color: rgb(0, 255, 0);}
+      25%		{ background-color: #07152e;}
+      50%		{ background-color: rgb(0, 255, 0);}
+      75%		{ background-color: #07152e;}
+      100%	{ background-color: rgb(0, 255, 0);}
+  } 
+
+.temp-circle-yellow {
+    background: yellow;
+  animation: blinkingCircleYellow 3s infinite; 
+}
+
+  @keyframes blinkingCircleYellow {
+      0%		{ background-color: yellow;}
+      25%		{ background-color: #07152e;}
+      50%		{ background-color: yellow;}
+      75%		{ background-color: #07152e;}
+      100%	{ background-color: yellow;}
+  } 
+
+.temp-circle-red {
+    background: red;
+  animation: blinkingCircleRed 3s infinite; 
+}
+
+  @keyframes blinkingCircleRed {
+      0%		{ background-color: red;}
+      25%		{ background-color: #07152e;}
+      50%		{ background-color: red;}
+      75%		{ background-color: #07152e;}
+      100%	{ background-color: red;}
+  } 
+
+.info-layout-container1 {
+  grid-area: 429/ 33/ 599/ 552;
+  display: flex;
+}
+
+.info-layout-container2 {
+    grid-area: 648/ 33/ 818/ 552;
+    display: flex;
+}
+
+.info-layout-container3 {
+    grid-area: 867/ 33/ 1037/ 552;
+    display: flex;
+}
+
+.info-layout-container4 {
+    grid-area: 429/ 1367/ 599/ 1886;
+    display: flex;
+}
+
+.info-layout-container5 {
+    grid-area: 648/ 1367/ 818/ 1886;
+    display: flex;
+}
+
+.info-layout-container6 {
+    grid-area: 867/ 1367/ 1037/ 1886;
+    display: flex;
+}
+
+.info-big-layout-container {
+   width: 50%;
+   height: 100%;
+     border: 1px solid #63d4ff;
+}
+
+.info-small-layout-container {
+    width: 25%;
+  height: 100%;
+  border: 1px solid #63d4ff;
+}
+
+
+  @keyframes blinkingBorderRed {
+      0%		{ border: 2px solid red;}
+      25%		{ border: 2px solid #07152e;}
+      50%		{ border: 2px solid red;}
+      75%		{ border: 2px solid #07152e;}
+      100%	{ border: 2px solid red;}
+  } 
+
+  .big-container-infoA {
+    grid-area: 431 / 33/ 601/ 293;
+}
+
+.big-container-infoB {
+    grid-area: 650 / 33/ 820/ 293;
+}
+
+.big-container-infoC {
+    grid-area: 868 / 33/ 1038/ 293;
+}
+
+.big-container-infoD {
+    grid-area: 431 / 1367/ 601/ 1627;
+}
+
+.big-container-infoE {
+    grid-area: 650 / 1367/ 820/ 1627;
+}
+
+.big-container-infoF {
+    grid-area: 868 / 1367/ 1038/ 1627;
+}
+.big-container-small-row {
+    width: 100%;
+  height: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  color: rgb(0, 255, 0);
+}
+
+.big-container-large-row {
+    width: 100%;
+  height: 40%;
+  display: flex;
+  justify-content: center;
+}
+
+.sensor-condition-text {
+  position: relative;
+  top: 10%; 
+  font-size: 25px;
+  color: rgb(0, 255, 0);
+}
+
+.green-container-row {
+    width: 100%;
+  height: 30%;
+  display: flex;
+  justify-content: center;
+}
+
+.green-box {
+  width: 13%;
+  height: 50%;
+  background: rgb(0, 255, 0);
+  margin: 3px;
+  color: darkred;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+
+.yellow-box {
+  width: 13%;
+  height: 50%;
+  background: yellow;
+  margin: 3px;
+  color: darkgreen;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+
+.red-box {
+  width: 13%;
+  height: 50%;
+  background: rgb(255, 0, 0);
+  margin: 3px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+
+.temperature-info-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.temperature-circle {
+  width: 85%;
+  height: 85%;
+  border: 5px solid darkgreen;
+  border-radius: 50%; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.temperature-value {
+  color: rgb(0, 255, 0);
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.unit {
+  color: rgb(0, 255, 0);
+    padding-left: 2px;
+  font-size: 20px;
+}
+
+.text-color {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(0, 255, 0);
+}
+
+#textColorA {
+    grid-area: 438/ 318/ 475/ 397;
+}
+
+#pressureTextA {
+    grid-area: 438/ 449/ 475/ 528;
+}
+
+#textColorB {
+    grid-area: 658/ 318/ 695/ 397;
+}
+
+#pressureTextB {
+    grid-area: 658/ 449/ 695/ 528;
+}
+
+#textColorC {
+    grid-area: 876/ 318/ 913/ 397;
+}
+
+#pressureTextC {
+    grid-area: 876/ 449/ 913/ 528;
+}
+
+#textColorD {
+    grid-area: 438/ 1653/ 475/ 1732;
+}
+
+#pressureTextD {
+    grid-area: 438/ 1783/ 475/ 1862;
+}
+
+#textColorE {
+    grid-area: 658/ 1653/ 695/ 1732;
+}
+
+#pressureTextE {
+    grid-area: 658/ 1783/ 695/ 1862;
+}
+
+#textColorF {
+    grid-area: 876/ 1653/ 913/ 1732;
+}
+
+#pressureTextF {
+    grid-area: 876/ 1783/ 913/ 1862;
+}
+
+#temperature-A {
+    grid-area: 478/ 300/ 593/ 415;
+}
+
+#pressure-A {
+    grid-area: 478/ 430/ 593/ 545;
+}
+
+#temperature-B {
+    grid-area: 697/ 300/ 812/ 415;
+}
+
+#pressure-B {
+    grid-area: 697/ 430/ 812/ 545;
+}
+
+#temperature-C {
+    grid-area: 914/ 300/ 1029/ 415;
+}
+
+#pressure-C {
+    grid-area: 914/ 430/ 1029/ 545;
+}
+
+#temperature-D {
+    grid-area: 478/ 1635/ 593/ 1750;
+}
+
+#pressure-D {
+    grid-area: 478/ 1764/ 593/ 1879;
+}
+
+#temperature-E {
+    grid-area: 697/ 1635/ 812/ 1750;
+}
+
+#pressure-E {
+    grid-area: 697/ 1764/ 812/ 1879;
+}
+
+#temperature-F {
+    grid-area: 914/ 1635/ 1029/ 1750;
+}
+
+#pressure-F {
+    grid-area: 914/ 1764/ 1029/ 1879;
+}

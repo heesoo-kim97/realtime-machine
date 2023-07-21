@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/header.css">
+    <link rel="stylesheet" href="./style/sideBody.css">
+    <link rel="stylesheet" href="./style/centralBody.css">
+    <title>Real Time Machine Monitoring</title>
+</head>
+<body>
+    <div class="monitoring-container">
+        <div class="header-container"></div>
+        <div class="company-text">BIX Company</div>
+
+        <div class="clock-container">
+            <div  class="date-box">
+                <div id="date-num"></div>
+                <div id="date-text" class="date-text"></div>
+            </div>
+            <div class="actual-time">
+                    <div id="hour-box" class="time-box"></div>
+                    <div class="semi-colon">:</div>
+                    <div id="min-box" class="time-box"></div>
+                    <div class="semi-colon">:</div>
+                    <div id="sec-box" class="time-box"></div>
+            </div>
+        </div>
+
+        <div id="chart-label1" class="chart-label-container">
+            <div class="chart-label-english">Factory Condition</div>
+            <div class="chart-label-korean">공장상황</div>
+        </div>
+
+        <div id="chart-label2" class="chart-label-container">
+            <div class="chart-label-english">Operation Rate</div>
+            <div class="chart-label-korean">머신 가동률</div>
+        </div>
+
+        <div id="chart-label3" class="chart-label-container">
+            <div class="chart-label-english">Production Rate</div>
+            <div class="chart-label-korean">머신 생산률</div>
+        </div>
+        
+        <div class="table-container">
+            <div class="table-header">
+              <div class="sub-header machine-header">Machine</div>
+              <div class="sub-header">Status</div>
+              <div class="sub-header">Op. Rate</div>
+              <div class="sub-header">Prod. Rate</div>
+            </div>
+            <div class="table-row">
+                <div class="sub-header">Machine A</div>
+              <div class="sub-header">
+                <div id="status-boxA" class="status-box"></div>
+              </div>
+              <div id="op-numA" class="sub-header">88.2 %</div>
+              <div id="prod-numA" class="sub-header">98.2 %</div>
+            </div>
+            <div class="table-row">
+              <div class="sub-header">Machine B</div>
+              <div class="sub-header">
+                  <div id="status-boxB" class="status-box"></div>
+              </div>
+              <div id="op-numB" class="sub-header">92.2 %</div>
+              <div id="prod-numB" class="sub-header">86.2 %</div>
+            </div>
+            <div class="table-row">
+                <div class="sub-header">Machine C</div>
+              <div class="sub-header">
+                  <div id="status-boxC" class="status-box"></div>
+              </div>
+              <div id="op-numC" class="sub-header">91.1 %</div>
+              <div id="prod-numC" class="sub-header">94.1 %</div>
+            </div>
+            <div class="table-row">
+                <div class="sub-header">Machine D</div>
+              <div class="sub-header">
+                  <div id="status-boxD" class="status-box"></div>
+              </div>
+              <div id="op-numD" class="sub-header">84.2 %</div>
+              <div id="prod-numD" class="sub-header">83.2 %</div>
+            </div>
+            <div class="table-row">
+                <div class="sub-header">Machine E</div>
+              <div class="sub-header">
+                  <div id="status-boxE" class="status-box"></div>
+              </div>
+              <div id="op-numE" class="sub-header">94.6 %</div>
+              <div id="prod-numE" class="sub-header">89.6 %</div>
+            </div>
+            <div class="table-row">
+                <div class="sub-header">Machine F</div>
+              <div class="sub-header">
+                  <div id="status-boxF" class="status-box"></div>
+              </div>
+              <div id="op-numF" class="sub-header">90.2 %</div>
+              <div id="prod-numF" class="sub-header">92.2 %</div>
+            </div>
+          </div>  
+        
+
+          <div id="operation-svg">
+            <div class="rate-text">Operation Rate by machine (%)</div>
+            <div id="d3-op-container"></div>
+          </div>
+          <div id="production-svg">
+            <div class="rate-text">Production Rate by machine (%)</div>
+            <div id="d3-prod-container"></div>
+          </div>
+
+          <div id="tooltip">hello</div>
+
+          <div class="alarm-container">
+            <audio id="alarm-audio" src="./audio/security-alarm-63578 -1.mp3" loop>
+            </audio>
+            <div id="sound-on" class="alarm" onclick="soundOffHandler()">
+                <svg width="40px" height="40px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+                    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="notification" fill="#63d4ff" transform="translate(64.000000, 42.666667)">
+                                <path d="M234.666667,341.333333 C234.666667,364.897483 215.564149,384 192,384 C168.435851,384 149.333333,364.897483 149.333333,341.333333 L234.666667,341.333333 M192,7.10542736e-15 C109.44,7.10542736e-15 42.6666667,76.3733333 42.6666667,170.666667 L42.6666667,219.52 L1.42108547e-14,341.333333 L106.666667,341.333333 C106.666667,388.461632 144.871701,426.666667 192,426.666667 C239.128299,426.666667 277.333333,388.461632 277.333333,341.333333 L384,341.333333 L341.333333,219.52 L341.333333,176.853333 C341.333333,96 294.186667,21.9733333 225.066667,6.18666667 C214.336364,2.79014004 203.232451,0.712633806 192,7.10542736e-15 Z M60.16,298.666667 L82.9866667,234.666667 L85.3333333,226.773333 L85.3333333,170.666667 C85.3333333,100.053333 133.12,42.6665446 192,42.6665446 C199.693665,42.6542739 207.3598,43.5856735 214.826667,45.44 C262.613333,57.1733333 298.666667,113.28 298.666667,175.786667 L298.666667,226.773333 L301.013333,233.6 L323.84,298.666667 L60.16,298.666667 Z">
+                            </path>
+                        </g>
+                      </g>
+                </svg>
+            </div>
+            <div id="sound-off" class="alarm hide-alarm" onclick="soundOnHandler()">
+                <svg width="40px" height="40px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+                    <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="drop" fill="#63d4ff" transform="translate(59.581722, 42.666667)">
+                            <path d="M392.836561,379.581717 L362.666662,409.751616 L294.248,341.333 L281.751611,341.333333 C281.751611,387.990349 244.306857,425.901674 197.829421,426.655234 L196.418278,426.666667 C149.761262,426.666667 111.849938,389.221912 111.096377,342.744476 L111.084945,341.333333 L4.418278,341.333333 L47.0849447,219.52 L47.0849447,170.666667 C47.0849447,147.563444 51.0934845,125.535996 58.3606158,105.444095 L-2.84217094e-14,47.0849493 L30.169894,16.9150553 L78.7580596,65.5041384 C78.7582875,65.5038057 78.7585154,65.503473 78.7587433,65.5031403 L95.111,81.857 L311.921278,298.666 L392.836561,379.581717 Z M239.084945,341.333333 L153.751611,341.333333 C153.751611,364.897483 172.854129,384 196.418278,384 C219.982427,384 239.084945,364.897483 239.084945,341.333333 Z M196.418278,3.55271368e-14 C207.650729,0.712633806 218.754642,2.79014004 229.484945,6.18666667 C297.913745,21.8154667 344.806481,94.5252907 345.737493,174.429833 L345.751611,176.853333 L345.751611,219.52 L374.127278,300.532 L304.508278,230.913 L303.084945,226.773333 L303.084945,175.786667 C303.084945,113.28 267.031611,57.1733333 219.244945,45.44 C211.778078,43.5856735 204.111943,42.6542739 196.418278,42.6665446 C174.660472,42.6665446 154.41747,50.502763 137.540796,63.9469012 L107.279156,33.6847249 C132.147318,12.5217631 162.988649,3.55271368e-14 196.418278,3.55271368e-14 Z M251.581,298.666 L92.852412,139.937162 C90.8888107,149.480538 89.8186593,159.443335 89.7546608,169.689914 L89.7516113,170.666667 L89.7516113,226.773333 L87.4049447,234.666667 L64.578278,298.666667 L251.581,298.666 Z" id="Combined-Shape">
+                            </path>
+                        </g>
+                    </g>
+                </svg> 
+            </div>
+        </div>
+
+
+         <div class="corner-container">  
+                <div class="corner-small-row">
+                  <div class="golden-corner"></div>
+                  <div class="blue-border"></div>
+                  <div class="golden-corner"></div>
+                </div>
+                <div class="corner-big-row">
+                </div>
+                <div class="corner-small-row">
+                  <div class="golden-corner"></div>
+                  <div class="blue-border"></div>
+                  <div class="golden-corner"></div>
+                </div>
+        </div>
+
+    <div class="filter-box-container"></div>
+    
+
+    <div class="legend-container">
+        <div class="legend-info">
+          <div class="legend-box green-background"></div>
+          <div class="legend-text">Normal</div>
+        </div>
+        <div class="legend-info">
+             <div class="legend-box yellow-background"></div>
+          <div class="legend-text">Caution</div>
+        </div>
+        <div class="legend-info">
+             <div class="legend-box red-background"></div>
+          <div class="legend-text">Danger</div>
+        </div>
+      </div>
+
+    <div class="svg-container">
+        <svg version="1.1" id="layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+	 y="0px" viewBox="0 0 590 750" style="enable-background:new 0 0 590 750;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill: #07152e;stroke:#63d4ff;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st1{fill: rgba(134, 183, 228, 0.2);}
+	.st2{fill: #63d4ff;} 
+  /*style="fill: #031f3b"*/ 
+</style>
+<polygon class="st0" points="353.3,241.8 300.9,218.1 300.9,101.6 353.3,125.3 "/>
+<polygon class="st0" points="390.8,218.1 353.3,241.8 353.3,125.3 390.8,101.6 "/>
+<polygon class="st0" points="381.9,188.6 364.2,199.8 364.2,144.7 381.9,133.6 "/>
+<polygon class="st0" points="390.8,101.6 352.9,125.3 300.5,101.6 338.4,78 "/>
+<g>
+	<path class="st0" d="M341.6,29.7c-3.5,0-6.4,2.5-6.4,5.6c0,0,0,0.1,0,0.1h0v12.6v26.6v12.6h0c0,0,0,0.1,0,0.1
+		c0,3.1,2.9,5.6,6.4,5.6c3.5,0,6.4-2.5,6.4-5.6c0,0,0-0.1,0-0.1h0V74.5V47.9V35.4h0c0,0,0-0.1,0-0.1C348,32.2,345.1,29.7,341.6,29.7
+		z"/>
+	<path class="st0" d="M363.7,41.9c0-3.1-2.9-5.6-6.4-5.6c-3.5,0-6.4,2.5-6.4,5.6c0,0,0,0.1,0,0.1h0v12.6v26.6v12.6h0
+		c0,0,0,0.1,0,0.1c0,3.1,2.9,5.6,6.4,5.6s6.4-2.5,6.4-5.6c0,0,0-0.1,0-0.1h0V81.1V54.5V41.9L363.7,41.9
+		C363.7,41.9,363.7,41.9,363.7,41.9z"/>
+	<path class="st0" d="M379.2,49.6c0-3.1-2.9-5.6-6.4-5.6c-3.5,0-6.4,2.5-6.4,5.6c0,0,0,0.1,0,0.1h0v12.6v26.6v12.6h0
+		c0,0,0,0.1,0,0.1c0,3.1,2.9,5.6,6.4,5.6s6.4-2.5,6.4-5.6c0,0,0-0.1,0-0.1h0V88.9V62.3V49.6L379.2,49.6
+		C379.2,49.7,379.2,49.7,379.2,49.6z"/>
+</g>
+<g>
+	<path class="st0" d="M322.6,41.7c-3.5,0-6.4,2.5-6.4,5.6c0,0,0,0.1,0,0.1h0v12.6v26.6v12.6h0c0,0,0,0.1,0,0.1
+		c0,3.1,2.9,5.6,6.4,5.6c3.5,0,6.4-2.5,6.4-5.6c0,0,0-0.1,0-0.1h0V86.5V59.9V47.4h0c0,0,0-0.1,0-0.1C329,44.2,326.1,41.7,322.6,41.7
+		z"/>
+	<path class="st0" d="M344.7,53.9c0-3.1-2.9-5.6-6.4-5.6c-3.5,0-6.4,2.5-6.4,5.6c0,0,0,0.1,0,0.1h0v12.6v26.6v12.6h0
+		c0,0,0,0.1,0,0.1c0,3.1,2.9,5.6,6.4,5.6s6.4-2.5,6.4-5.6c0,0,0-0.1,0-0.1h0V93.1V66.5V53.9L344.7,53.9
+		C344.7,53.9,344.7,53.9,344.7,53.9z"/>
+	<path class="st0" d="M360.2,61.6c0-3.1-2.9-5.6-6.4-5.6c-3.5,0-6.4,2.5-6.4,5.6c0,0,0,0.1,0,0.1h0v12.6v26.6v12.6h0
+		c0,0,0,0.1,0,0.1c0,3.1,2.9,5.6,6.4,5.6s6.4-2.5,6.4-5.6c0,0,0-0.1,0-0.1h0v-12.6V74.3V61.6L360.2,61.6
+		C360.2,61.7,360.2,61.7,360.2,61.6z"/>
+</g>
+<polygon class="st0" points="353.3,98.8 300.9,75.1 300.9,39.6 353.3,63.3 "/>
+<polygon class="st0" points="390.8,75.1 353.3,98.8 353.3,63.3 390.8,39.6 "/>
+<polygon class="st0" points="390.8,39.6 352.9,63.3 300.5,39.6 338.4,16 "/>
+<polygon class="st1" points="300.4,234.7 175.1,178.5 95,228.8 220.3,284.9 345.6,341.1 425.7,290.9 "/>
+<polygon class="st1" points="322.3,527.8 322.6,527.6 197.3,471.4 117.1,521.6 198,557.9 197.7,558.1 323,614.3 403.2,564 "/>
+<polygon class="st1" points="436,281.1 355.8,331.4 111.2,485.2 236.5,541.4 481.2,387.6 561.3,337.3 "/>
+<polygon class="st1" points="573.2,580.8 328.6,734.6 203.2,678.4 447.9,524.6 "/>
+<polygon class="st0" points="165.3,245.7 112.9,222 112.9,131.3 165.3,155 "/>
+<polygon class="st0" points="245.4,195.4 165.3,245.7 165.3,155 245.4,104.7 "/>
+<polygon class="st0" points="245.4,104.7 165.3,155 112.9,131.3 193,81.1 "/>
+<polygon class="st0" points="166.7,142.2 140.7,130.4 140.7,85.3 166.7,97.1 "/>
+<polygon class="st0" points="206.6,117.2 166.7,142.2 166.7,97.1 206.6,72.1 "/>
+<polygon class="st0" points="201.8,114.8 171.5,133.7 171.5,99.5 201.8,80.6 "/>
+<polygon class="st0" points="206.6,72.1 166.7,97.1 140.7,85.3 180.5,60.4 "/>
+<polyline class="st0" points="201.6,115.1 175.5,103.4 175.5,97 "/>
+<polygon class="st0" points="220.3,231.7 176.8,212.3 176.8,194.5 220.3,214 "/>
+<polygon class="st0" points="229.2,189.4 213.5,199.2 213.5,181.4 229.2,171.6 "/>
+<polygon class="st0" points="236.1,204.1 220.3,214 176.8,194.5 192.5,184.7 "/>
+<polygon class="st0" points="264.6,290 212.2,266.4 212.2,175.7 264.6,199.3 "/>
+<polygon class="st0" points="344.8,239.7 264.6,290 264.6,199.3 344.8,149.1 "/>
+<g>
+	<polygon class="st0" points="126,193.3 126,193.3 126,193.3 	"/>
+	<path class="st0" d="M96.7,211.8l-1.4-12l24.7-15.6l0.6-0.4c1.5-0.5,3-0.3,3-0.3c1.3,0.3,2.6,1.2,3.5,2.5c1.6,2.4,0.8,6.1-0.9,7.2
+		L96.7,211.8z"/>
+</g>
+<g>
+	<polygon class="st0" points="127,211.3 127,211.3 127,211.3 	"/>
+	<path class="st0" d="M97.7,229.8l-1.4-12l24.7-15.6l0.6-0.4c1.5-0.5,3-0.3,3-0.3c1.3,0.3,2.6,1.2,3.5,2.5c1.6,2.4,0.8,6.1-0.9,7.2
+		L97.7,229.8z"/>
+</g>
+<polygon class="st0" points="446.3,574.9 436,570.2 436,478.7 446.3,483.3 "/>
+<polygon class="st0" points="462,565 446.3,574.9 446.3,483.3 462,473.5 "/>
+<polygon class="st0" points="462,473.5 446.3,483.3 436,478.7 451.7,468.8 "/>
+<polygon class="st0" points="466.3,583.9 456,579.2 456,487.7 466.3,492.3 "/>
+<polygon class="st0" points="482,574 466.3,583.9 466.3,492.3 482,482.5 "/>
+<polygon class="st0" points="482,482.5 466.3,492.3 456,487.7 471.7,477.8 "/>
+<polygon class="st0" points="487.3,592.9 477,588.2 477,496.7 487.3,501.3 "/>
+<polygon class="st0" points="503,583 487.3,592.9 487.3,501.3 503,491.5 "/>
+<polygon class="st0" points="503,491.5 487.3,501.3 477,496.7 492.7,486.8 "/>
+<g>
+	<polygon class="st0" points="325.7,226.3 325.7,226.3 325.7,226.3 	"/>
+	<path class="st0" d="M385.5,253.6L368,268.4l-50.4-23l-1.2-0.6c-2.3-1.9-3.5-4.5-3.5-4.5c-0.9-2.4-0.8-5.3,0.3-8.1
+		c2.1-5,8.8-7.6,12.4-6L385.5,253.6z"/>
+</g>
+<polygon class="st0" points="295.2,218.3 271.3,233.4 271.3,206.2 295.2,191.2 "/>
+<polygon class="st0" points="292.3,213.4 280.1,221 280.1,207.2 292.3,199.6 "/>
+<polygon class="st0" points="278.7,222.4 274.1,225 274.1,211.2 278.7,208.6 "/>
+<polygon class="st0" points="344.8,149.1 264.6,199.3 212.2,175.7 292.3,125.4 "/>
+<path class="st0" d="M278.3,77.3c0-6.5-6-11.7-13.5-11.7s-13.5,5.3-13.5,11.7c0,0.1,0,0.1,0,0.2h0v9.8l0,0l0,82.4h0
+	c0,0.1,0,0.1,0,0.2c0,6.5,6,11.7,13.5,11.7c7.5,0,13.5-5.3,13.5-11.7c0-0.1,0-0.1,0-0.2h0v-9.8V87.2v-9.8h0
+	C278.3,77.4,278.3,77.4,278.3,77.3z"/>
+<path class="st0" d="M310.2,142.9L310.2,142.9l0-23.5h0c0-0.1,0-0.1,0-0.2c0-6.5-6-11.7-13.4-11.7c-7.4,0-13.4,5.2-13.4,11.7
+	c0,0.1,0,0.1,0,0.2h0v5.5v18v5.5h0c0,0.1,0,0.1,0,0.2c0,6.5,6,11.7,13.4,11.7c7.4,0,13.4-5.2,13.4-11.7c0-0.1,0-0.1,0-0.2h0V142.9z"
+	/>
+<g>
+	<path class="st0" d="M41.8,179.8"/>
+	<path class="st0" d="M32.8,191.6c-3.1,14.1-4.8,30.2-4.8,47.2c0,7.9,0.4,15.6,1.1,22.9c0.7,9.6,19,17.3,41.4,17.3
+		c22.5,0,40.8-7.7,41.4-17.3c0,0,0,0,0,0c1.2-12.2,1.1-17.3,1.1-22.9c0-56.5-19-102.2-42.5-102.2c-14.3,0-27,17.1-34.7,43.3"/>
+	<path class="st0" d="M35.7,179.8c-1.1,3.7-2.1,7.6-3,11.7"/>
+</g>
+<path class="st0" d="M28.2,249.4c8.6,7.9,25.1,14.6,42.2,14.6c17.2,0,33.6-6.2,42.2-13.8c0.3-5,0.3-8.3,0.3-11.7l-0.1,1
+	c-0.5,6.9-20.4,18.5-42.4,18.5c-22,0-41.9-12.6-42.4-19.5l-0.1,0C28,242.2,28.1,245.8,28.2,249.4z"/>
+<polygon class="st0" points="334.5,689.2 282.1,665.6 282.1,574.9 334.5,598.5 "/>
+<polygon class="st0" points="325.2,684.9 291.4,669.7 291.4,611.1 325.2,626.4 "/>
+<polygon class="st0" points="482.9,363 430.4,339.3 430.4,165.8 482.9,189.5 "/>
+<polygon class="st0" points="440.7,391.5 388.2,367.9 388.2,194.4 440.7,218.1 "/>
+<polygon class="st0" points="483.7,595.6 334.5,689.2 334.5,598.5 483.7,504.9 "/>
+<polygon class="st0" points="397.6,420.1 345.2,396.5 345.2,223 397.6,246.6 "/>
+<polygon class="st0" points="520.4,339.3 482.9,363 482.9,189.5 520.4,165.8 "/>
+<polygon class="st0" points="520.4,165.8 482.4,189.5 430,165.8 467.9,142.2 "/>
+<polygon class="st0" points="478.2,367.9 440.7,391.5 440.7,218.1 478.2,194.4 "/>
+<polygon class="st0" points="478.2,194.4 440.2,218.1 387.8,194.4 425.7,170.7 "/>
+<polygon class="st0" points="435.1,396.5 397.6,420.1 397.6,246.6 435.1,223 "/>
+<polygon class="st0" points="435.1,223 397.2,246.6 344.8,223 382.7,199.3 "/>
+<polygon class="st0" points="483.7,504.9 334.5,598.5 282.1,574.9 431.3,481.2 "/>
+<polygon class="st0" points="333.9,581.7 310.3,571 310.3,530.2 333.9,540.8 "/>
+<polygon class="st0" points="434,520.5 333.9,581.7 333.9,540.8 434,479.7 "/>
+<polygon class="st0" points="434,479.7 333.9,540.8 310.3,530.2 410.4,469 "/>
+<polygon class="st0" points="427,290.7 405.7,304 405.7,252.1 427,238.8 "/>
+<polygon class="st0" points="470.9,262.1 449.6,275.4 449.6,223.5 470.9,210.2 "/>
+<polygon class="st0" points="512.3,233.5 491,246.9 491,195 512.3,181.6 "/>
+<g>
+	<polygon class="st0" points="379.8,295 379.8,294.9 379.8,294.9 	"/>
+	<path class="st0" d="M191.4,412.7l-3.4-28.5l177.4-110.9l1.4-0.9c3.6-1.1,7.1-0.6,7.1-0.6c3.1,0.8,6.2,2.8,8.2,5.9
+		c3.8,5.7,2,14.4-2.2,17.1L191.4,412.7z"/>
+</g>
+<path class="st0" d="M200.4,460.7c0-120.3-28.4-127.1-63.4-127.1s-63.4,6.8-63.4,127.1c0,16.8,0.6,33.1,1.6,48.9
+	c1,20.4,28.3,36.8,61.8,36.8c33.6,0,60.9-16.4,61.8-36.8c0,0,0,0,0,0C199.8,493.8,200.4,477.4,200.4,460.7z"/>
+<path class="st2" d="M136.7,483.8c-34.8,0-62.9-19.4-64-44.1l1,0c0.5,11.6,7.2,22.4,19,30.5c11.8,8.2,27.5,12.6,44,12.6
+	c16.5,0,32.2-4.5,44-12.7c11.8-8.1,18.5-19,19-30.5c0-0.1,0-0.2,0.1-0.3c0,0,0.1-0.1,0.1-0.1l0.3,0.4l0.5,0
+	C199.7,464.4,171.6,483.8,136.7,483.8z"/>
+<path class="st2" d="M136.7,498.8c-34.8,0-62.9-19.4-64-44.1l1,0c0.5,11.6,7.2,22.4,19,30.5c11.8,8.2,27.5,12.6,44,12.6
+	c16.5,0,32.2-4.5,44-12.7c11.8-8.1,18.5-19,19-30.5c0-0.1,0-0.2,0.1-0.3c0,0,0.1-0.1,0.1-0.1l0.3,0.4l0.5,0
+	C199.7,479.4,171.6,498.8,136.7,498.8z"/>
+<path class="st0" d="M251.3,75.1L251.3,75.1c0,0.1,0,0.1,0,0.2c0,5.7,6,10.3,13.4,10.3c7.4,0,13.4-4.6,13.4-10.3c0-0.1,0-0.1,0-0.2
+	h0v-0.2c-0.6-5.2-6.4-9.4-13.4-9.4c-7,0-12.8,4.1-13.4,9.4V75.1z"/>
+<path class="st0" d="M251.2,109.6c0,6.5,6,11.7,13.5,11.7c7.5,0,13.5-5.2,13.5-11.7v1c0,6.5-6,11.7-13.5,11.7
+	c-7.5,0-13.5-5.2-13.5-11.7V109.6z"/>
+<path class="st0" d="M283.2,133.6c0,6.5,6,11.7,13.5,11.7c7.5,0,13.5-5.2,13.5-11.7v1c0,6.5-6,11.7-13.5,11.7
+	c-7.5,0-13.5-5.2-13.5-11.7V133.6z"/>
+<g>
+	<path class="st0" d="M44.7,410.6c-7.4,0-13.5,5.3-13.5,11.7c0,0.1,0,0.1,0,0.2h0v26.4v55.9v26.4h0c0,0.1,0,0.1,0,0.2
+		c0,6.5,6,11.7,13.5,11.7c7.4,0,13.5-5.3,13.5-11.7c0-0.1,0-0.1,0-0.2h0v-26.4v-55.9v-26.4h0c0-0.1,0-0.1,0-0.2
+		C58.2,415.9,52.1,410.6,44.7,410.6z"/>
+	<path class="st0" d="M91.2,444.4c0-6.5-6-11.7-13.5-11.7c-7.4,0-13.5,5.3-13.5,11.7c0,0.1,0,0.1,0,0.2h0v26.4v55.9v26.4h0
+		c0,0.1,0,0.1,0,0.2c0,6.5,6,11.7,13.5,11.7c7.4,0,13.5-5.3,13.5-11.7c0-0.1,0-0.1,0-0.2h0v-26.4v-55.9v-26.4h0
+		C91.2,444.5,91.2,444.4,91.2,444.4z"/>
+</g>
+<path class="st0" d="M251.2,141.6c0,6.5,6,11.7,13.5,11.7c7.5,0,13.5-5.2,13.5-11.7v1c0,6.5-6,11.7-13.5,11.7
+	c-7.5,0-13.5-5.2-13.5-11.7V141.6z"/>
+<path class="st0" d="M31.2,451.6c0,6.5,6,11.7,13.5,11.7c7.5,0,13.5-5.2,13.5-11.7v1c0,6.5-6,11.7-13.5,11.7
+	c-7.5,0-13.5-5.2-13.5-11.7V451.6z"/>
+<path class="st0" d="M31.2,477.6c0,6.5,6,11.7,13.5,11.7c7.5,0,13.5-5.2,13.5-11.7v1c0,6.5-6,11.7-13.5,11.7
+	c-7.5,0-13.5-5.2-13.5-11.7V477.6z"/>
+<path class="st0" d="M31.2,503.6c0,6.5,6,11.7,13.5,11.7c7.5,0,13.5-5.2,13.5-11.7v1c0,6.5-6,11.7-13.5,11.7
+	c-7.5,0-13.5-5.2-13.5-11.7V503.6z"/>
+<path class="st0" d="M283.3,117.6L283.3,117.6c0,0.1,0,0.1,0,0.2c0,6,6,10.8,13.4,10.8c7.4,0,13.4-4.8,13.4-10.8c0-0.1,0-0.1,0-0.2
+	h0v-0.2c-0.6-5.5-6.4-9.8-13.4-9.8c-7,0-12.8,4.3-13.4,9.8V117.6z"/>
+<path class="st0" d="M31.3,421.4L31.3,421.4c0,0.1,0,0.1,0,0.2c0,6.5,6,11.7,13.4,11.7c7.4,0,13.4-5.2,13.4-11.7c0-0.1,0-0.1,0-0.2
+	h0v-0.2c-0.6-6-6.4-10.7-13.4-10.7c-7,0-12.8,4.7-13.4,10.7V421.4z"/>
+<path class="st0" d="M64.2,473.6c0,6.5,6,11.7,13.5,11.7c7.5,0,13.5-5.2,13.5-11.7v1c0,6.5-6,11.7-13.5,11.7
+	c-7.5,0-13.5-5.2-13.5-11.7V473.6z"/>
+<path class="st0" d="M363.6,305.2c5.2-3.3,6.3-10.9,2.5-16.9c-3.8-6-11.2-8.2-16.4-4.9l0.8-0.5c5.2-3.3,12.6-1.1,16.4,4.9
+	c3.8,6,2.7,13.6-2.5,16.9L363.6,305.2z"/>
+<path class="st0" d="M318.6,333.2c5.2-3.3,6.3-10.9,2.5-16.9c-3.8-6-11.2-8.2-16.4-4.9l0.8-0.5c5.2-3.3,12.6-1.1,16.4,4.9
+	c3.8,6,2.7,13.6-2.5,16.9L318.6,333.2z"/>
+<path class="st0" d="M270.6,363.2c5.2-3.3,6.3-10.9,2.5-16.9c-3.8-6-11.2-8.2-16.4-4.9l0.8-0.5c5.2-3.3,12.6-1.1,16.4,4.9
+	c3.8,6,2.7,13.6-2.5,16.9L270.6,363.2z"/>
+<path class="st0" d="M217.6,396.2c5.2-3.3,6.3-10.9,2.5-16.9c-3.8-6-11.2-8.2-16.4-4.9l0.8-0.5c5.2-3.3,12.6-1.1,16.4,4.9
+	c3.8,6,2.7,13.6-2.5,16.9L217.6,396.2z"/>
+<path class="st0" d="M64.2,499.6c0,6.5,6,11.7,13.5,11.7c7.5,0,13.5-5.2,13.5-11.7v1c0,6.5-6,11.7-13.5,11.7
+	c-7.5,0-13.5-5.2-13.5-11.7V499.6z"/>
+<path class="st0" d="M64.2,525.6c0,6.5,6,11.7,13.5,11.7c7.5,0,13.5-5.2,13.5-11.7v1c0,6.5-6,11.7-13.5,11.7
+	c-7.5,0-13.5-5.2-13.5-11.7V525.6z"/>
+<path class="st0" d="M64.3,443.4L64.3,443.4c0,0.1,0,0.1,0,0.2c0,6.5,6,11.7,13.4,11.7c7.4,0,13.4-5.2,13.4-11.7c0-0.1,0-0.1,0-0.2
+	h0v-0.2c-0.6-6-6.4-10.7-13.4-10.7c-7,0-12.8,4.7-13.4,10.7V443.4z"/>
+<path class="st0" d="M32.4,191.5l-13.7,0v0c0,0,0,0,0,0c-1.3,0-2.4-2.6-2.4-5.9c0-2.3,0.5-4.3,1.3-5.2l4.5-20.4h0.1
+	c0.1-3,1.1-5.4,2.3-5.4c0,0,0,0,0,0v0h5.2h11h5.2v0c0,0,0,0,0,0c1.3,0,2.3,2.5,2.3,5.7c0,3.1-1,5.7-2.3,5.7c0,0,0,0,0,0v0h-5.2H30.3
+	l-3,13.9h8.1L32.4,191.5z"/>
+<line class="st0" x1="175.5" y1="103.4" x2="171.5" y2="105.6"/>
+<polygon class="st0" points="180.6,567.1 154.6,555.3 154.6,510.3 180.6,522 "/>
+<polygon class="st0" points="220.4,542.1 180.6,567.1 180.6,522 220.4,497.1 "/>
+<polygon class="st0" points="220.4,497.1 180.6,522 154.6,510.3 194.4,485.3 "/>
+</svg>
+    </div>
+
+  
+    <div id="ripple-1" class="all-ripple-containers">
+        <div  class="ripple-button-container">
+          <div class="ripple-number">1</div>
+          <div id="ripple-sensor1" class="ripple-sensor ripple-sensor-green"> 
+                <span style="--i:1;"></span>
+                <span style="--i:2;"></span>
+                <span style="--i:3;"></span>
+                <span style="--i:4;"></span>
+                <span style="--i:5;"></span>
+                <span style="--i:6;"></span>
+                <span style="--i:7;"></span>
+                <span style="--i:8;"></span>
+                <span style="--i:9;"></span>
+                <span class="last-ripple" style="--i:10;"></span>
+         </div>
+       </div>  
+    </div>  
+    
+    <div id="ripple-2" class="all-ripple-containers">
+        <div  class="ripple-button-container">
+          <div class="ripple-number">2</div>
+          <div id="ripple-sensor2" class="ripple-sensor ripple-sensor-green"> 
+                <span style="--i:1;"></span>
+                <span style="--i:2;"></span>
+                <span style="--i:3;"></span>
+                <span style="--i:4;"></span>
+                <span style="--i:5;"></span>
+                <span style="--i:6;"></span>
+                <span style="--i:7;"></span>
+                <span style="--i:8;"></span>
+                <span style="--i:9;"></span>
+                <span class="last-ripple" style="--i:10;"></span>
+         </div>
+       </div>  
+    </div>  
+
+    <div id="ripple-3" class="all-ripple-containers">
+        <div  class="ripple-button-container">
+          <div class="ripple-number">3</div>
+          <div id="ripple-sensor3" class="ripple-sensor ripple-sensor-green"> 
+                <span style="--i:1;"></span>
+                <span style="--i:2;"></span>
+                <span style="--i:3;"></span>
+                <span style="--i:4;"></span>
+                <span style="--i:5;"></span>
+                <span style="--i:6;"></span>
+                <span style="--i:7;"></span>
+                <span style="--i:8;"></span>
+                <span style="--i:9;"></span>
+                <span class="last-ripple" style="--i:10;"></span>
+         </div>
+       </div>  
+    </div>  
+
+    <div id="ripple-4" class="all-ripple-containers">
+        <div  class="ripple-button-container">
+          <div class="ripple-number">4</div>
+          <div id="ripple-sensor4" class="ripple-sensor ripple-sensor-green"> 
+                <span style="--i:1;"></span>
+                <span style="--i:2;"></span>
+                <span style="--i:3;"></span>
+                <span style="--i:4;"></span>
+                <span style="--i:5;"></span>
+                <span style="--i:6;"></span>
+                <span style="--i:7;"></span>
+                <span style="--i:8;"></span>
+                <span style="--i:9;"></span>
+                <span class="last-ripple" style="--i:10;"></span>
+         </div>
+       </div>  
+    </div>  
+
+    <div id="ripple-5" class="all-ripple-containers">
+        <div  class="ripple-button-container">
+          <div class="ripple-number">5</div>
+          <div id="ripple-sensor5" class="ripple-sensor ripple-sensor-green"> 
+                <span style="--i:1;"></span>
+                <span style="--i:2;"></span>
+                <span style="--i:3;"></span>
+                <span style="--i:4;"></span>
+                <span style="--i:5;"></span>
+                <span style="--i:6;"></span>
+                <span style="--i:7;"></span>
+                <span style="--i:8;"></span>
+                <span style="--i:9;"></span>
+                <span class="last-ripple" style="--i:10;"></span>
+         </div>
+       </div>  
+    </div>  
+
+    <div id="ripple-6" class="all-ripple-containers">
+        <div  class="ripple-button-container">
+          <div class="ripple-number">6</div>
+          <div id="ripple-sensor6" class="ripple-sensor ripple-sensor-green"> 
+                <span style="--i:1;"></span>
+                <span style="--i:2;"></span>
+                <span style="--i:3;"></span>
+                <span style="--i:4;"></span>
+                <span style="--i:5;"></span>
+                <span style="--i:6;"></span>
+                <span style="--i:7;"></span>
+                <span style="--i:8;"></span>
+                <span style="--i:9;"></span>
+                <span class="last-ripple" style="--i:10;"></span>
+         </div>
+       </div>  
+    </div>  
+
+    <div id="pop-up" class="pop-up-container">
+        <div class="empty-extra-space"></div>
+        <div class="pop-up-first-row">
+          <div class="warning-circle">!</div>
+        </div>
+        <div class="pop-up-second-row">"Danger" will trigger alarm sound.</div>
+        <div class="pop-up-third-row">Click the bell icon to turn off the sound.</div>
+        <div class="pop-up-fourth-row">
+          <button id="confirm-button" class="confirm-button" onclick="clickButton()">CLOSE</button>  
+        </div>
+      </div>
+
+    <div class="filter-box-container-small">
+        <div class="sensor-type-list">1.Operation Sensor</div>
+        <div class="sensor-type-list">2.Production Sensor</div>
+        <div class="sensor-type-list">3.Temperature Sensor</div>
+        <div class="sensor-type-list">4.Pressure Sensor</div>
+    </div>
+
+    <div class="filter-box-container-small2">
+        <div class="sensor-type-list">1.Operation Sensor</div>
+        <div class="sensor-type-list">2.Production Sensor</div>
+        <div class="sensor-type-list">3.Temperature Sensor</div>
+        <div class="sensor-type-list">4.Pressure Sensor</div>
+    </div>
+
+    <div id="label-containerA" class="label-container">
+        <div class="number-box">
+          <div class="number-text">1</div>
+          <div class="color-overlay"></div>
+        </div>
+        <div class="label-box">
+          <div class="english-machine-title">Machine A</div>
+          <div class="korean-machine-title">머신 A</div>
+          <div class="dot-signal">
+               <div id="tempCirA" class="temp-circle temp-circle-normal"></div>
+          </div>
+        </div>
+      </div>
+
+    <div id="label-containerB" class="label-container">
+        <div class="number-box">
+          <div class="number-text">2</div>
+          <div class="color-overlay"></div>
+        </div>
+        <div class="label-box">
+          <div class="english-machine-title">Machine B</div>
+          <div class="korean-machine-title">머신 B</div>
+          <div class="dot-signal">
+               <div id="tempCirB" class="temp-circle temp-circle-normal"></div>
+          </div>
+        </div>
+    </div>
+
+    <div id="label-containerC" class="label-container">
+        <div class="number-box">
+          <div class="number-text">3</div>
+          <div class="color-overlay"></div>
+        </div>
+        <div class="label-box">
+          <div class="english-machine-title">Machine C</div>
+          <div class="korean-machine-title">머신 C</div>
+          <div class="dot-signal">
+               <div id="tempCirC" class="temp-circle temp-circle-normal"></div>
+          </div>
+        </div>
+    </div>
+
+    <div id="label-containerD" class="label-container">
+        <div class="number-box">
+          <div class="number-text">4</div>
+          <div class="color-overlay"></div>
+        </div>
+        <div class="label-box">
+          <div class="english-machine-title">Machine D</div>
+          <div class="korean-machine-title">머신 D</div>
+          <div class="dot-signal">
+               <div id="tempCirD" class="temp-circle temp-circle-normal"></div>
+          </div>
+        </div>
+    </div>
+
+    <div id="label-containerE" class="label-container">
+        <div class="number-box">
+          <div class="number-text">5</div>
+          <div class="color-overlay"></div>
+        </div>
+        <div class="label-box">
+          <div class="english-machine-title">Machine E</div>
+          <div class="korean-machine-title">머신 E</div>
+          <div class="dot-signal">
+               <div id="tempCirE" class="temp-circle temp-circle-normal"></div>
+          </div>
+        </div>
+    </div>
+
+    <div id="label-containerF" class="label-container">
+        <div class="number-box">
+          <div class="number-text">6</div>
+          <div class="color-overlay"></div>
+        </div>
+        <div class="label-box">
+          <div class="english-machine-title">Machine F</div>
+          <div class="korean-machine-title">머신 F</div>
+          <div class="dot-signal">
+               <div id="tempCirF" class="temp-circle temp-circle-normal"></div>
+          </div>
+        </div>
+    </div>
+
+    <div class="info-layout-container1">
+        <div id="sensor-condition-boxA" class="info-big-layout-container"></div>
+        <div id="temperature-condition-boxA" class="info-small-layout-container"></div>
+        <div id="pressure-condition-boxA" class="info-small-layout-container"></div>
+    </div>
+    
+    <div class="info-layout-container2">
+        <div id="sensor-condition-boxB" class="info-big-layout-container"></div>
+        <div id="temperature-condition-boxB" class="info-small-layout-container"></div>
+        <div id="pressure-condition-boxB" class="info-small-layout-container"></div>
+    </div>
+
+    <div class="info-layout-container3">
+        <div id="sensor-condition-boxC" class="info-big-layout-container"></div>
+        <div id="temperature-condition-boxC" class="info-small-layout-container"></div>
+        <div id="pressure-condition-boxC" class="info-small-layout-container"></div>
+    </div>
+
+    <div class="info-layout-container4">
+        <div id="sensor-condition-boxD" class="info-big-layout-container"></div>
+        <div id="temperature-condition-boxD" class="info-small-layout-container"></div>
+        <div id="pressure-condition-boxD" class="info-small-layout-container"></div>
+    </div>
+
+    <div class="info-layout-container5">
+        <div id="sensor-condition-boxE" class="info-big-layout-container"></div>
+        <div id="temperature-condition-boxE" class="info-small-layout-container"></div>
+        <div id="pressure-condition-boxE" class="info-small-layout-container"></div>
+    </div>
+
+    <div class="info-layout-container6">
+        <div id="sensor-condition-boxF" class="info-big-layout-container"></div>
+        <div id="temperature-condition-boxF" class="info-small-layout-container"></div>
+        <div id="pressure-condition-boxF" class="info-small-layout-container"></div>
+    </div>
+
+    <div class="big-container-infoA">
+        <div class="big-container-small-row">
+          <div id="sensor-cond-textA">Condition</div>
+           <svg width="40" height="40" xmlns="http://w3.org/2000/svg" version="1.1" viewbox="0 0 500 500">
+               <g id="svg-colorA" style="fill: rgb(0, 255, 0)">
+                  <g><path d="M236.6,118.7c-56-41.6-135.1-30-176.7,26c-41.6,56-30,135.1,26,176.7s135.1,30,176.7-26    C304.2,239.4,292.6,160.3,236.6,118.7z M118,278.2c-32.1-23.9-38.8-69.3-14.9-101.5s69.3-38.8,101.5-14.9s38.8,69.3,14.9,101.5    C195.5,295.5,150.1,302.1,118,278.2z"/>
+                  <g><path d="M195,174.7c-25-18.6-60.4-13.4-79.1,11.6c-18.6,25-13.4,60.4,11.6,79.1s60.4,13.4,79.1-11.6     C225.2,228.7,220,193.3,195,174.7z M135.8,254.3c-18.9-14.1-22.8-40.8-8.8-59.7s40.8-22.8,59.7-8.8c18.9,14.1,22.8,40.8,8.8,59.7     S154.7,268.4,135.8,254.3z"/></g>
+                  <circle cx="161.2" cy="220" id="XMLID_22_" r="27.5"/><g><path d="M241,150.7L207.8,126l28.5-33.6c2.9-3.4,7.8-4,11.2-1.4l15.5,11.5c3.4,2.5,4.2,7.5,1.8,11.2L241,150.7z" id="XMLID_21_"/><path d="M266.7,227.4l-6-40.9l43.9-3.6c4.4-0.4,8.4,2.7,9,6.9l2.8,19.1c0.6,4.2-2.3,8.3-6.6,9.2L266.7,227.4z" id="XMLID_20_"/><path d="M230.6,299.8l24.6-33.1l33.6,28.5c3.4,2.9,4,7.8,1.4,11.2l-11.5,15.5c-2.5,3.4-7.5,4.2-11.2,1.8     L230.6,299.8z" id="XMLID_19_"/><path d="M153.9,325.5l40.9-6l3.6,43.9c0.4,4.4-2.7,8.4-6.9,9l-19.1,2.8c-4.2,0.6-8.3-2.3-9.2-6.6L153.9,325.5z" id="XMLID_18_"/><path d="M81.5,289.4l33.1,24.6l-28.5,33.6c-2.9,3.4-7.8,4-11.2,1.4l-15.5-11.5c-3.4-2.5-4.2-7.5-1.8-11.2     L81.5,289.4z" id="XMLID_17_"/><path d="M55.8,212.7l6,40.9l-43.9,3.6c-4.4,0.4-8.4-2.7-9-6.9l-2.8-19.1c-0.6-4.2,2.3-8.3,6.6-9.2L55.8,212.7z" id="XMLID_16_"/><path d="M91.9,140.3l-24.6,33.1l-33.6-28.5c-3.4-2.9-4-7.8-1.4-11.2l11.5-15.5c2.5-3.4,7.5-4.2,11.2-1.8     L91.9,140.3z" id="XMLID_15_"/><path d="M168.6,114.6l-40.9,6l-3.6-43.9c-0.4-4.4,2.7-8.4,6.9-9l19.1-2.8c4.2-0.6,8.3,2.3,9.2,6.6L168.6,114.6z" id="XMLID_14_"/></g>
+              <animateTransform attributeName="transform"
+              attributeType="XML"
+              type="rotate"
+              from="0 161.2 220"
+              to="360 161.2 220"
+              dur="3s"
+              repeatCount="indefinite"/>
+          </g>
+          <g>
+              <path d="M449.2,264.7c-39.8-29.6-96.1-21.3-125.7,18.5C294,323,302.2,379.3,342,408.9s96.1,21.3,125.7-18.5    C497.3,350.6,489,294.3,449.2,264.7z M364.8,378.2c-22.8-17-27.6-49.3-10.6-72.1c17-22.8,49.3-27.6,72.1-10.6s27.6,49.3,10.6,72.1    C420,390.4,387.7,395.2,364.8,378.2z"/><g><path d="M419.6,304.6c-17.8-13.2-43-9.5-56.2,8.3c-13.2,17.8-9.5,43,8.3,56.2s43,9.5,56.2-8.3C441.1,343,437.4,317.8,419.6,304.6     z M377.5,361.2c-13.4-10-16.2-29-6.2-42.5c10-13.4,29-16.2,42.5-6.2s16.2,29,6.2,42.5S391,371.2,377.5,361.2z"/></g><circle cx="395.6" cy="336.8" id="XMLID_9_" r="19.5"/><g><path d="M452.3,287.5L428.8,270l20.3-23.9c2-2.4,5.6-2.8,8-1l11,8.2c2.4,1.8,3,5.3,1.3,7.9L452.3,287.5z" id="XMLID_8_"/><path d="M470.6,342l-4.3-29.1l31.2-2.5c3.1-0.3,5.9,2,6.4,4.9l2,13.6c0.4,3-1.6,5.9-4.7,6.5L470.6,342z" id="XMLID_7_"/><path d="M444.9,393.5l17.5-23.6l23.9,20.3c2.4,2,2.8,5.6,1,8l-8.2,11c-1.8,2.4-5.3,3-7.9,1.3L444.9,393.5z" id="XMLID_6_"/><path d="M390.4,411.8l29.1-4.3l2.5,31.2c0.3,3.1-2,5.9-4.9,6.4l-13.6,2c-3,0.4-5.9-1.6-6.5-4.7L390.4,411.8z" id="XMLID_5_"/><path d="M338.9,386.1l23.6,17.5l-20.3,23.9c-2,2.4-5.6,2.8-8,1l-11-8.2c-2.4-1.8-3-5.3-1.3-7.9L338.9,386.1z" id="XMLID_4_"/><path d="M320.6,331.6l4.3,29.1l-31.2,2.5c-3.1,0.3-5.9-2-6.4-4.9l-2-13.6c-0.4-3,1.6-5.9,4.7-6.5L320.6,331.6z" id="XMLID_3_"/><path d="M346.3,280.1l-17.5,23.6l-23.9-20.3c-2.4-2-2.8-5.6-1-8l8.2-11c1.8-2.4,5.3-3,7.9-1.3L346.3,280.1z" id="XMLID_2_"/><path d="M400.8,261.8l-29.1,4.3l-2.5-31.2c-0.3-3.1,2-5.9,4.9-6.4l13.6-2c3-0.4,5.9,1.6,6.5,4.7L400.8,261.8z" id="XMLID_1_"/></g>
+              <animateTransform attributeName="transform"
+              attributeType="XML"
+              type="rotate"
+              from="360 395.6 336.8"
+              to="0 395.6 336.8"
+              dur="2.5s"
+              repeatCount="indefinite"/>
+          </g>
+        </g>
+        </svg>
+           </div>
+        <div id="large-container" class="big-container-large-row">
+          <div id="conditionTextA" class="sensor-condition-text">Normal</div>
+           </div>
+        <div class="green-container-row">   	  
+            <div id="sensor-box1A" class="green-box">1</div>
+            <div id="sensor-box2A" class="green-box">2</div>
+            <div id="sensor-box3A" class="green-box">3</div>
+            <div id="sensor-box4A" class="green-box">4</div>
+        </div>
+    </div>
+
+    <div class="big-container-infoB">
+        <div class="big-container-small-row">
+        <div id="sensor-cond-textB">Condition</div>
+        <svg width="40" height="40" xmlns="http://w3.org/2000/svg" version="1.1" viewbox="0 0 500 500">
+            <g id="svg-colorB" style="fill: rgb(0, 255, 0)">
+                <g><path d="M236.6,118.7c-56-41.6-135.1-30-176.7,26c-41.6,56-30,135.1,26,176.7s135.1,30,176.7-26    C304.2,239.4,292.6,160.3,236.6,118.7z M118,278.2c-32.1-23.9-38.8-69.3-14.9-101.5s69.3-38.8,101.5-14.9s38.8,69.3,14.9,101.5    C195.5,295.5,150.1,302.1,118,278.2z"/>
+                <g><path d="M195,174.7c-25-18.6-60.4-13.4-79.1,11.6c-18.6,25-13.4,60.4,11.6,79.1s60.4,13.4,79.1-11.6     C225.2,228.7,220,193.3,195,174.7z M135.8,254.3c-18.9-14.1-22.8-40.8-8.8-59.7s40.8-22.8,59.7-8.8c18.9,14.1,22.8,40.8,8.8,59.7     S154.7,268.4,135.8,254.3z"/></g>
+                <circle cx="161.2" cy="220" id="XMLID_22_" r="27.5"/><g><path d="M241,150.7L207.8,126l28.5-33.6c2.9-3.4,7.8-4,11.2-1.4l15.5,11.5c3.4,2.5,4.2,7.5,1.8,11.2L241,150.7z" id="XMLID_21_"/><path d="M266.7,227.4l-6-40.9l43.9-3.6c4.4-0.4,8.4,2.7,9,6.9l2.8,19.1c0.6,4.2-2.3,8.3-6.6,9.2L266.7,227.4z" id="XMLID_20_"/><path d="M230.6,299.8l24.6-33.1l33.6,28.5c3.4,2.9,4,7.8,1.4,11.2l-11.5,15.5c-2.5,3.4-7.5,4.2-11.2,1.8     L230.6,299.8z" id="XMLID_19_"/><path d="M153.9,325.5l40.9-6l3.6,43.9c0.4,4.4-2.7,8.4-6.9,9l-19.1,2.8c-4.2,0.6-8.3-2.3-9.2-6.6L153.9,325.5z" id="XMLID_18_"/><path d="M81.5,289.4l33.1,24.6l-28.5,33.6c-2.9,3.4-7.8,4-11.2,1.4l-15.5-11.5c-3.4-2.5-4.2-7.5-1.8-11.2     L81.5,289.4z" id="XMLID_17_"/><path d="M55.8,212.7l6,40.9l-43.9,3.6c-4.4,0.4-8.4-2.7-9-6.9l-2.8-19.1c-0.6-4.2,2.3-8.3,6.6-9.2L55.8,212.7z" id="XMLID_16_"/><path d="M91.9,140.3l-24.6,33.1l-33.6-28.5c-3.4-2.9-4-7.8-1.4-11.2l11.5-15.5c2.5-3.4,7.5-4.2,11.2-1.8     L91.9,140.3z" id="XMLID_15_"/><path d="M168.6,114.6l-40.9,6l-3.6-43.9c-0.4-4.4,2.7-8.4,6.9-9l19.1-2.8c4.2-0.6,8.3,2.3,9.2,6.6L168.6,114.6z" id="XMLID_14_"/></g>
+            <animateTransform attributeName="transform"
+            attributeType="XML"
+            type="rotate"
+            from="0 161.2 220"
+            to="360 161.2 220"
+            dur="3s"
+            repeatCount="indefinite"/>
+        </g>
+        <g>
+            <path d="M449.2,264.7c-39.8-29.6-96.1-21.3-125.7,18.5C294,323,302.2,379.3,342,408.9s96.1,21.3,125.7-18.5    C497.3,350.6,489,294.3,449.2,264.7z M364.8,378.2c-22.8-17-27.6-49.3-10.6-72.1c17-22.8,49.3-27.6,72.1-10.6s27.6,49.3,10.6,72.1    C420,390.4,387.7,395.2,364.8,378.2z"/><g><path d="M419.6,304.6c-17.8-13.2-43-9.5-56.2,8.3c-13.2,17.8-9.5,43,8.3,56.2s43,9.5,56.2-8.3C441.1,343,437.4,317.8,419.6,304.6     z M377.5,361.2c-13.4-10-16.2-29-6.2-42.5c10-13.4,29-16.2,42.5-6.2s16.2,29,6.2,42.5S391,371.2,377.5,361.2z"/></g><circle cx="395.6" cy="336.8" id="XMLID_9_" r="19.5"/><g><path d="M452.3,287.5L428.8,270l20.3-23.9c2-2.4,5.6-2.8,8-1l11,8.2c2.4,1.8,3,5.3,1.3,7.9L452.3,287.5z" id="XMLID_8_"/><path d="M470.6,342l-4.3-29.1l31.2-2.5c3.1-0.3,5.9,2,6.4,4.9l2,13.6c0.4,3-1.6,5.9-4.7,6.5L470.6,342z" id="XMLID_7_"/><path d="M444.9,393.5l17.5-23.6l23.9,20.3c2.4,2,2.8,5.6,1,8l-8.2,11c-1.8,2.4-5.3,3-7.9,1.3L444.9,393.5z" id="XMLID_6_"/><path d="M390.4,411.8l29.1-4.3l2.5,31.2c0.3,3.1-2,5.9-4.9,6.4l-13.6,2c-3,0.4-5.9-1.6-6.5-4.7L390.4,411.8z" id="XMLID_5_"/><path d="M338.9,386.1l23.6,17.5l-20.3,23.9c-2,2.4-5.6,2.8-8,1l-11-8.2c-2.4-1.8-3-5.3-1.3-7.9L338.9,386.1z" id="XMLID_4_"/><path d="M320.6,331.6l4.3,29.1l-31.2,2.5c-3.1,0.3-5.9-2-6.4-4.9l-2-13.6c-0.4-3,1.6-5.9,4.7-6.5L320.6,331.6z" id="XMLID_3_"/><path d="M346.3,280.1l-17.5,23.6l-23.9-20.3c-2.4-2-2.8-5.6-1-8l8.2-11c1.8-2.4,5.3-3,7.9-1.3L346.3,280.1z" id="XMLID_2_"/><path d="M400.8,261.8l-29.1,4.3l-2.5-31.2c-0.3-3.1,2-5.9,4.9-6.4l13.6-2c3-0.4,5.9,1.6,6.5,4.7L400.8,261.8z" id="XMLID_1_"/></g>
+            <animateTransform attributeName="transform"
+            attributeType="XML"
+            type="rotate"
+            from="360 395.6 336.8"
+            to="0 395.6 336.8"
+            dur="2.5s"
+            repeatCount="indefinite"/>
+        </g>
+    </g>
+    </svg>
+        </div>
+        <div id="large-container" class="big-container-large-row">
+        <div id="conditionTextB" class="sensor-condition-text">Normal</div>
+        </div>
+        <div class="green-container-row">   	  
+            <div id="sensor-box1B" class="green-box">1</div>
+            <div id="sensor-box2B" class="green-box">2</div>
+            <div id="sensor-box3B" class="green-box">3</div>
+            <div id="sensor-box4B" class="green-box">4</div>
+        </div>
+    </div>
+
+    <div class="big-container-infoC">
+        <div class="big-container-small-row">
+        <div id="sensor-cond-textC">Condition</div>
+        <svg width="40" height="40" xmlns="http://w3.org/2000/svg" version="1.1" viewbox="0 0 500 500">
+            <g id="svg-colorC" style="fill: rgb(0, 255, 0)">
+                <g><path d="M236.6,118.7c-56-41.6-135.1-30-176.7,26c-41.6,56-30,135.1,26,176.7s135.1,30,176.7-26    C304.2,239.4,292.6,160.3,236.6,118.7z M118,278.2c-32.1-23.9-38.8-69.3-14.9-101.5s69.3-38.8,101.5-14.9s38.8,69.3,14.9,101.5    C195.5,295.5,150.1,302.1,118,278.2z"/>
+                <g><path d="M195,174.7c-25-18.6-60.4-13.4-79.1,11.6c-18.6,25-13.4,60.4,11.6,79.1s60.4,13.4,79.1-11.6     C225.2,228.7,220,193.3,195,174.7z M135.8,254.3c-18.9-14.1-22.8-40.8-8.8-59.7s40.8-22.8,59.7-8.8c18.9,14.1,22.8,40.8,8.8,59.7     S154.7,268.4,135.8,254.3z"/></g>
+                <circle cx="161.2" cy="220" id="XMLID_22_" r="27.5"/><g><path d="M241,150.7L207.8,126l28.5-33.6c2.9-3.4,7.8-4,11.2-1.4l15.5,11.5c3.4,2.5,4.2,7.5,1.8,11.2L241,150.7z" id="XMLID_21_"/><path d="M266.7,227.4l-6-40.9l43.9-3.6c4.4-0.4,8.4,2.7,9,6.9l2.8,19.1c0.6,4.2-2.3,8.3-6.6,9.2L266.7,227.4z" id="XMLID_20_"/><path d="M230.6,299.8l24.6-33.1l33.6,28.5c3.4,2.9,4,7.8,1.4,11.2l-11.5,15.5c-2.5,3.4-7.5,4.2-11.2,1.8     L230.6,299.8z" id="XMLID_19_"/><path d="M153.9,325.5l40.9-6l3.6,43.9c0.4,4.4-2.7,8.4-6.9,9l-19.1,2.8c-4.2,0.6-8.3-2.3-9.2-6.6L153.9,325.5z" id="XMLID_18_"/><path d="M81.5,289.4l33.1,24.6l-28.5,33.6c-2.9,3.4-7.8,4-11.2,1.4l-15.5-11.5c-3.4-2.5-4.2-7.5-1.8-11.2     L81.5,289.4z" id="XMLID_17_"/><path d="M55.8,212.7l6,40.9l-43.9,3.6c-4.4,0.4-8.4-2.7-9-6.9l-2.8-19.1c-0.6-4.2,2.3-8.3,6.6-9.2L55.8,212.7z" id="XMLID_16_"/><path d="M91.9,140.3l-24.6,33.1l-33.6-28.5c-3.4-2.9-4-7.8-1.4-11.2l11.5-15.5c2.5-3.4,7.5-4.2,11.2-1.8     L91.9,140.3z" id="XMLID_15_"/><path d="M168.6,114.6l-40.9,6l-3.6-43.9c-0.4-4.4,2.7-8.4,6.9-9l19.1-2.8c4.2-0.6,8.3,2.3,9.2,6.6L168.6,114.6z" id="XMLID_14_"/></g>
+            <animateTransform attributeName="transform"
+            attributeType="XML"
+            type="rotate"
+            from="0 161.2 220"
+            to="360 161.2 220"
+            dur="3s"
+            repeatCount="indefinite"/>
+        </g>
+        <g>
+            <path d="M449.2,264.7c-39.8-29.6-96.1-21.3-125.7,18.5C294,323,302.2,379.3,342,408.9s96.1,21.3,125.7-18.5    C497.3,350.6,489,294.3,449.2,264.7z M364.8,378.2c-22.8-17-27.6-49.3-10.6-72.1c17-22.8,49.3-27.6,72.1-10.6s27.6,49.3,10.6,72.1    C420,390.4,387.7,395.2,364.8,378.2z"/><g><path d="M419.6,304.6c-17.8-13.2-43-9.5-56.2,8.3c-13.2,17.8-9.5,43,8.3,56.2s43,9.5,56.2-8.3C441.1,343,437.4,317.8,419.6,304.6     z M377.5,361.2c-13.4-10-16.2-29-6.2-42.5c10-13.4,29-16.2,42.5-6.2s16.2,29,6.2,42.5S391,371.2,377.5,361.2z"/></g><circle cx="395.6" cy="336.8" id="XMLID_9_" r="19.5"/><g><path d="M452.3,287.5L428.8,270l20.3-23.9c2-2.4,5.6-2.8,8-1l11,8.2c2.4,1.8,3,5.3,1.3,7.9L452.3,287.5z" id="XMLID_8_"/><path d="M470.6,342l-4.3-29.1l31.2-2.5c3.1-0.3,5.9,2,6.4,4.9l2,13.6c0.4,3-1.6,5.9-4.7,6.5L470.6,342z" id="XMLID_7_"/><path d="M444.9,393.5l17.5-23.6l23.9,20.3c2.4,2,2.8,5.6,1,8l-8.2,11c-1.8,2.4-5.3,3-7.9,1.3L444.9,393.5z" id="XMLID_6_"/><path d="M390.4,411.8l29.1-4.3l2.5,31.2c0.3,3.1-2,5.9-4.9,6.4l-13.6,2c-3,0.4-5.9-1.6-6.5-4.7L390.4,411.8z" id="XMLID_5_"/><path d="M338.9,386.1l23.6,17.5l-20.3,23.9c-2,2.4-5.6,2.8-8,1l-11-8.2c-2.4-1.8-3-5.3-1.3-7.9L338.9,386.1z" id="XMLID_4_"/><path d="M320.6,331.6l4.3,29.1l-31.2,2.5c-3.1,0.3-5.9-2-6.4-4.9l-2-13.6c-0.4-3,1.6-5.9,4.7-6.5L320.6,331.6z" id="XMLID_3_"/><path d="M346.3,280.1l-17.5,23.6l-23.9-20.3c-2.4-2-2.8-5.6-1-8l8.2-11c1.8-2.4,5.3-3,7.9-1.3L346.3,280.1z" id="XMLID_2_"/><path d="M400.8,261.8l-29.1,4.3l-2.5-31.2c-0.3-3.1,2-5.9,4.9-6.4l13.6-2c3-0.4,5.9,1.6,6.5,4.7L400.8,261.8z" id="XMLID_1_"/></g>
+            <animateTransform attributeName="transform"
+            attributeType="XML"
+            type="rotate"
+            from="360 395.6 336.8"
+            to="0 395.6 336.8"
+            dur="2.5s"
+            repeatCount="indefinite"/>
+        </g>
+    </g>
+    </svg>
+        </div>
+        <div id="large-container" class="big-container-large-row">
+        <div id="conditionTextC" class="sensor-condition-text">Normal</div>
+        </div>
+        <div class="green-container-row">   	  
+            <div id="sensor-box1C" class="green-box">1</div>
+            <div id="sensor-box2C" class="green-box">2</div>
+            <div id="sensor-box3C" class="green-box">3</div>
+            <div id="sensor-box4C" class="green-box">4</div>
+        </div>
+    </div>
+
+    <div class="big-container-infoD">
+        <div class="big-container-small-row">
+        <div id="sensor-cond-textD">Condition</div>
+        <svg width="40" height="40" xmlns="http://w3.org/2000/svg" version="1.1" viewbox="0 0 500 500">
+            <g id="svg-colorD" style="fill: rgb(0, 255, 0)">
+                <g><path d="M236.6,118.7c-56-41.6-135.1-30-176.7,26c-41.6,56-30,135.1,26,176.7s135.1,30,176.7-26    C304.2,239.4,292.6,160.3,236.6,118.7z M118,278.2c-32.1-23.9-38.8-69.3-14.9-101.5s69.3-38.8,101.5-14.9s38.8,69.3,14.9,101.5    C195.5,295.5,150.1,302.1,118,278.2z"/>
+                <g><path d="M195,174.7c-25-18.6-60.4-13.4-79.1,11.6c-18.6,25-13.4,60.4,11.6,79.1s60.4,13.4,79.1-11.6     C225.2,228.7,220,193.3,195,174.7z M135.8,254.3c-18.9-14.1-22.8-40.8-8.8-59.7s40.8-22.8,59.7-8.8c18.9,14.1,22.8,40.8,8.8,59.7     S154.7,268.4,135.8,254.3z"/></g>
+                <circle cx="161.2" cy="220" id="XMLID_22_" r="27.5"/><g><path d="M241,150.7L207.8,126l28.5-33.6c2.9-3.4,7.8-4,11.2-1.4l15.5,11.5c3.4,2.5,4.2,7.5,1.8,11.2L241,150.7z" id="XMLID_21_"/><path d="M266.7,227.4l-6-40.9l43.9-3.6c4.4-0.4,8.4,2.7,9,6.9l2.8,19.1c0.6,4.2-2.3,8.3-6.6,9.2L266.7,227.4z" id="XMLID_20_"/><path d="M230.6,299.8l24.6-33.1l33.6,28.5c3.4,2.9,4,7.8,1.4,11.2l-11.5,15.5c-2.5,3.4-7.5,4.2-11.2,1.8     L230.6,299.8z" id="XMLID_19_"/><path d="M153.9,325.5l40.9-6l3.6,43.9c0.4,4.4-2.7,8.4-6.9,9l-19.1,2.8c-4.2,0.6-8.3-2.3-9.2-6.6L153.9,325.5z" id="XMLID_18_"/><path d="M81.5,289.4l33.1,24.6l-28.5,33.6c-2.9,3.4-7.8,4-11.2,1.4l-15.5-11.5c-3.4-2.5-4.2-7.5-1.8-11.2     L81.5,289.4z" id="XMLID_17_"/><path d="M55.8,212.7l6,40.9l-43.9,3.6c-4.4,0.4-8.4-2.7-9-6.9l-2.8-19.1c-0.6-4.2,2.3-8.3,6.6-9.2L55.8,212.7z" id="XMLID_16_"/><path d="M91.9,140.3l-24.6,33.1l-33.6-28.5c-3.4-2.9-4-7.8-1.4-11.2l11.5-15.5c2.5-3.4,7.5-4.2,11.2-1.8     L91.9,140.3z" id="XMLID_15_"/><path d="M168.6,114.6l-40.9,6l-3.6-43.9c-0.4-4.4,2.7-8.4,6.9-9l19.1-2.8c4.2-0.6,8.3,2.3,9.2,6.6L168.6,114.6z" id="XMLID_14_"/></g>
+            <animateTransform attributeName="transform"
+            attributeType="XML"
+            type="rotate"
+            from="0 161.2 220"
+            to="360 161.2 220"
+            dur="3s"
+            repeatCount="indefinite"/>
+        </g>
+        <g>
+            <path d="M449.2,264.7c-39.8-29.6-96.1-21.3-125.7,18.5C294,323,302.2,379.3,342,408.9s96.1,21.3,125.7-18.5    C497.3,350.6,489,294.3,449.2,264.7z M364.8,378.2c-22.8-17-27.6-49.3-10.6-72.1c17-22.8,49.3-27.6,72.1-10.6s27.6,49.3,10.6,72.1    C420,390.4,387.7,395.2,364.8,378.2z"/><g><path d="M419.6,304.6c-17.8-13.2-43-9.5-56.2,8.3c-13.2,17.8-9.5,43,8.3,56.2s43,9.5,56.2-8.3C441.1,343,437.4,317.8,419.6,304.6     z M377.5,361.2c-13.4-10-16.2-29-6.2-42.5c10-13.4,29-16.2,42.5-6.2s16.2,29,6.2,42.5S391,371.2,377.5,361.2z"/></g><circle cx="395.6" cy="336.8" id="XMLID_9_" r="19.5"/><g><path d="M452.3,287.5L428.8,270l20.3-23.9c2-2.4,5.6-2.8,8-1l11,8.2c2.4,1.8,3,5.3,1.3,7.9L452.3,287.5z" id="XMLID_8_"/><path d="M470.6,342l-4.3-29.1l31.2-2.5c3.1-0.3,5.9,2,6.4,4.9l2,13.6c0.4,3-1.6,5.9-4.7,6.5L470.6,342z" id="XMLID_7_"/><path d="M444.9,393.5l17.5-23.6l23.9,20.3c2.4,2,2.8,5.6,1,8l-8.2,11c-1.8,2.4-5.3,3-7.9,1.3L444.9,393.5z" id="XMLID_6_"/><path d="M390.4,411.8l29.1-4.3l2.5,31.2c0.3,3.1-2,5.9-4.9,6.4l-13.6,2c-3,0.4-5.9-1.6-6.5-4.7L390.4,411.8z" id="XMLID_5_"/><path d="M338.9,386.1l23.6,17.5l-20.3,23.9c-2,2.4-5.6,2.8-8,1l-11-8.2c-2.4-1.8-3-5.3-1.3-7.9L338.9,386.1z" id="XMLID_4_"/><path d="M320.6,331.6l4.3,29.1l-31.2,2.5c-3.1,0.3-5.9-2-6.4-4.9l-2-13.6c-0.4-3,1.6-5.9,4.7-6.5L320.6,331.6z" id="XMLID_3_"/><path d="M346.3,280.1l-17.5,23.6l-23.9-20.3c-2.4-2-2.8-5.6-1-8l8.2-11c1.8-2.4,5.3-3,7.9-1.3L346.3,280.1z" id="XMLID_2_"/><path d="M400.8,261.8l-29.1,4.3l-2.5-31.2c-0.3-3.1,2-5.9,4.9-6.4l13.6-2c3-0.4,5.9,1.6,6.5,4.7L400.8,261.8z" id="XMLID_1_"/></g>
+            <animateTransform attributeName="transform"
+            attributeType="XML"
+            type="rotate"
+            from="360 395.6 336.8"
+            to="0 395.6 336.8"
+            dur="2.5s"
+            repeatCount="indefinite"/>
+        </g>
+    </g>
+    </svg>
+        </div>
+        <div id="large-container" class="big-container-large-row">
+        <div id="conditionTextD" class="sensor-condition-text">Normal</div>
+        </div>
+        <div class="green-container-row">   	  
+            <div id="sensor-box1D" class="green-box">1</div>
+            <div id="sensor-box2D" class="green-box">2</div>
+            <div id="sensor-box3D" class="green-box">3</div>
+            <div id="sensor-box4D" class="green-box">4</div>
+        </div>
+    </div>
+
+    <div class="big-container-infoE">
+        <div class="big-container-small-row">
+        <div id="sensor-cond-textE">Condition</div>
+        <svg width="40" height="40" xmlns="http://w3.org/2000/svg" version="1.1" viewbox="0 0 500 500">
+            <g id="svg-colorE" style="fill: rgb(0, 255, 0)">
+                <g><path d="M236.6,118.7c-56-41.6-135.1-30-176.7,26c-41.6,56-30,135.1,26,176.7s135.1,30,176.7-26    C304.2,239.4,292.6,160.3,236.6,118.7z M118,278.2c-32.1-23.9-38.8-69.3-14.9-101.5s69.3-38.8,101.5-14.9s38.8,69.3,14.9,101.5    C195.5,295.5,150.1,302.1,118,278.2z"/>
+                <g><path d="M195,174.7c-25-18.6-60.4-13.4-79.1,11.6c-18.6,25-13.4,60.4,11.6,79.1s60.4,13.4,79.1-11.6     C225.2,228.7,220,193.3,195,174.7z M135.8,254.3c-18.9-14.1-22.8-40.8-8.8-59.7s40.8-22.8,59.7-8.8c18.9,14.1,22.8,40.8,8.8,59.7     S154.7,268.4,135.8,254.3z"/></g>
+                <circle cx="161.2" cy="220" id="XMLID_22_" r="27.5"/><g><path d="M241,150.7L207.8,126l28.5-33.6c2.9-3.4,7.8-4,11.2-1.4l15.5,11.5c3.4,2.5,4.2,7.5,1.8,11.2L241,150.7z" id="XMLID_21_"/><path d="M266.7,227.4l-6-40.9l43.9-3.6c4.4-0.4,8.4,2.7,9,6.9l2.8,19.1c0.6,4.2-2.3,8.3-6.6,9.2L266.7,227.4z" id="XMLID_20_"/><path d="M230.6,299.8l24.6-33.1l33.6,28.5c3.4,2.9,4,7.8,1.4,11.2l-11.5,15.5c-2.5,3.4-7.5,4.2-11.2,1.8     L230.6,299.8z" id="XMLID_19_"/><path d="M153.9,325.5l40.9-6l3.6,43.9c0.4,4.4-2.7,8.4-6.9,9l-19.1,2.8c-4.2,0.6-8.3-2.3-9.2-6.6L153.9,325.5z" id="XMLID_18_"/><path d="M81.5,289.4l33.1,24.6l-28.5,33.6c-2.9,3.4-7.8,4-11.2,1.4l-15.5-11.5c-3.4-2.5-4.2-7.5-1.8-11.2     L81.5,289.4z" id="XMLID_17_"/><path d="M55.8,212.7l6,40.9l-43.9,3.6c-4.4,0.4-8.4-2.7-9-6.9l-2.8-19.1c-0.6-4.2,2.3-8.3,6.6-9.2L55.8,212.7z" id="XMLID_16_"/><path d="M91.9,140.3l-24.6,33.1l-33.6-28.5c-3.4-2.9-4-7.8-1.4-11.2l11.5-15.5c2.5-3.4,7.5-4.2,11.2-1.8     L91.9,140.3z" id="XMLID_15_"/><path d="M168.6,114.6l-40.9,6l-3.6-43.9c-0.4-4.4,2.7-8.4,6.9-9l19.1-2.8c4.2-0.6,8.3,2.3,9.2,6.6L168.6,114.6z" id="XMLID_14_"/></g>
+            <animateTransform attributeName="transform"
+            attributeType="XML"
+            type="rotate"
+            from="0 161.2 220"
+            to="360 161.2 220"
+            dur="3s"
+            repeatCount="indefinite"/>
+        </g>
+        <g>
+            <path d="M449.2,264.7c-39.8-29.6-96.1-21.3-125.7,18.5C294,323,302.2,379.3,342,408.9s96.1,21.3,125.7-18.5    C497.3,350.6,489,294.3,449.2,264.7z M364.8,378.2c-22.8-17-27.6-49.3-10.6-72.1c17-22.8,49.3-27.6,72.1-10.6s27.6,49.3,10.6,72.1    C420,390.4,387.7,395.2,364.8,378.2z"/><g><path d="M419.6,304.6c-17.8-13.2-43-9.5-56.2,8.3c-13.2,17.8-9.5,43,8.3,56.2s43,9.5,56.2-8.3C441.1,343,437.4,317.8,419.6,304.6     z M377.5,361.2c-13.4-10-16.2-29-6.2-42.5c10-13.4,29-16.2,42.5-6.2s16.2,29,6.2,42.5S391,371.2,377.5,361.2z"/></g><circle cx="395.6" cy="336.8" id="XMLID_9_" r="19.5"/><g><path d="M452.3,287.5L428.8,270l20.3-23.9c2-2.4,5.6-2.8,8-1l11,8.2c2.4,1.8,3,5.3,1.3,7.9L452.3,287.5z" id="XMLID_8_"/><path d="M470.6,342l-4.3-29.1l31.2-2.5c3.1-0.3,5.9,2,6.4,4.9l2,13.6c0.4,3-1.6,5.9-4.7,6.5L470.6,342z" id="XMLID_7_"/><path d="M444.9,393.5l17.5-23.6l23.9,20.3c2.4,2,2.8,5.6,1,8l-8.2,11c-1.8,2.4-5.3,3-7.9,1.3L444.9,393.5z" id="XMLID_6_"/><path d="M390.4,411.8l29.1-4.3l2.5,31.2c0.3,3.1-2,5.9-4.9,6.4l-13.6,2c-3,0.4-5.9-1.6-6.5-4.7L390.4,411.8z" id="XMLID_5_"/><path d="M338.9,386.1l23.6,17.5l-20.3,23.9c-2,2.4-5.6,2.8-8,1l-11-8.2c-2.4-1.8-3-5.3-1.3-7.9L338.9,386.1z" id="XMLID_4_"/><path d="M320.6,331.6l4.3,29.1l-31.2,2.5c-3.1,0.3-5.9-2-6.4-4.9l-2-13.6c-0.4-3,1.6-5.9,4.7-6.5L320.6,331.6z" id="XMLID_3_"/><path d="M346.3,280.1l-17.5,23.6l-23.9-20.3c-2.4-2-2.8-5.6-1-8l8.2-11c1.8-2.4,5.3-3,7.9-1.3L346.3,280.1z" id="XMLID_2_"/><path d="M400.8,261.8l-29.1,4.3l-2.5-31.2c-0.3-3.1,2-5.9,4.9-6.4l13.6-2c3-0.4,5.9,1.6,6.5,4.7L400.8,261.8z" id="XMLID_1_"/></g>
+            <animateTransform attributeName="transform"
+            attributeType="XML"
+            type="rotate"
+            from="360 395.6 336.8"
+            to="0 395.6 336.8"
+            dur="2.5s"
+            repeatCount="indefinite"/>
+        </g>
+    </g>
+    </svg>
+        </div>
+        <div id="large-container" class="big-container-large-row">
+        <div id="conditionTextE" class="sensor-condition-text">Normal</div>
+        </div>
+        <div class="green-container-row">   	  
+            <div id="sensor-box1E" class="green-box">1</div>
+            <div id="sensor-box2E" class="green-box">2</div>
+            <div id="sensor-box3E" class="green-box">3</div>
+            <div id="sensor-box4E" class="green-box">4</div>
+        </div>
+    </div>
+
+    <div class="big-container-infoF">
+        <div class="big-container-small-row">
+        <div id="sensor-cond-textF">Condition</div>
+        <svg width="40" height="40" xmlns="http://w3.org/2000/svg" version="1.1" viewbox="0 0 500 500">
+            <g id="svg-colorF" style="fill: rgb(0, 255, 0)">
+                <g><path d="M236.6,118.7c-56-41.6-135.1-30-176.7,26c-41.6,56-30,135.1,26,176.7s135.1,30,176.7-26    C304.2,239.4,292.6,160.3,236.6,118.7z M118,278.2c-32.1-23.9-38.8-69.3-14.9-101.5s69.3-38.8,101.5-14.9s38.8,69.3,14.9,101.5    C195.5,295.5,150.1,302.1,118,278.2z"/>
+                <g><path d="M195,174.7c-25-18.6-60.4-13.4-79.1,11.6c-18.6,25-13.4,60.4,11.6,79.1s60.4,13.4,79.1-11.6     C225.2,228.7,220,193.3,195,174.7z M135.8,254.3c-18.9-14.1-22.8-40.8-8.8-59.7s40.8-22.8,59.7-8.8c18.9,14.1,22.8,40.8,8.8,59.7     S154.7,268.4,135.8,254.3z"/></g>
+                <circle cx="161.2" cy="220" id="XMLID_22_" r="27.5"/><g><path d="M241,150.7L207.8,126l28.5-33.6c2.9-3.4,7.8-4,11.2-1.4l15.5,11.5c3.4,2.5,4.2,7.5,1.8,11.2L241,150.7z" id="XMLID_21_"/><path d="M266.7,227.4l-6-40.9l43.9-3.6c4.4-0.4,8.4,2.7,9,6.9l2.8,19.1c0.6,4.2-2.3,8.3-6.6,9.2L266.7,227.4z" id="XMLID_20_"/><path d="M230.6,299.8l24.6-33.1l33.6,28.5c3.4,2.9,4,7.8,1.4,11.2l-11.5,15.5c-2.5,3.4-7.5,4.2-11.2,1.8     L230.6,299.8z" id="XMLID_19_"/><path d="M153.9,325.5l40.9-6l3.6,43.9c0.4,4.4-2.7,8.4-6.9,9l-19.1,2.8c-4.2,0.6-8.3-2.3-9.2-6.6L153.9,325.5z" id="XMLID_18_"/><path d="M81.5,289.4l33.1,24.6l-28.5,33.6c-2.9,3.4-7.8,4-11.2,1.4l-15.5-11.5c-3.4-2.5-4.2-7.5-1.8-11.2     L81.5,289.4z" id="XMLID_17_"/><path d="M55.8,212.7l6,40.9l-43.9,3.6c-4.4,0.4-8.4-2.7-9-6.9l-2.8-19.1c-0.6-4.2,2.3-8.3,6.6-9.2L55.8,212.7z" id="XMLID_16_"/><path d="M91.9,140.3l-24.6,33.1l-33.6-28.5c-3.4-2.9-4-7.8-1.4-11.2l11.5-15.5c2.5-3.4,7.5-4.2,11.2-1.8     L91.9,140.3z" id="XMLID_15_"/><path d="M168.6,114.6l-40.9,6l-3.6-43.9c-0.4-4.4,2.7-8.4,6.9-9l19.1-2.8c4.2-0.6,8.3,2.3,9.2,6.6L168.6,114.6z" id="XMLID_14_"/></g>
+            <animateTransform attributeName="transform"
+            attributeType="XML"
+            type="rotate"
+            from="0 161.2 220"
+            to="360 161.2 220"
+            dur="3s"
+            repeatCount="indefinite"/>
+        </g>
+        <g>
+            <path d="M449.2,264.7c-39.8-29.6-96.1-21.3-125.7,18.5C294,323,302.2,379.3,342,408.9s96.1,21.3,125.7-18.5    C497.3,350.6,489,294.3,449.2,264.7z M364.8,378.2c-22.8-17-27.6-49.3-10.6-72.1c17-22.8,49.3-27.6,72.1-10.6s27.6,49.3,10.6,72.1    C420,390.4,387.7,395.2,364.8,378.2z"/><g><path d="M419.6,304.6c-17.8-13.2-43-9.5-56.2,8.3c-13.2,17.8-9.5,43,8.3,56.2s43,9.5,56.2-8.3C441.1,343,437.4,317.8,419.6,304.6     z M377.5,361.2c-13.4-10-16.2-29-6.2-42.5c10-13.4,29-16.2,42.5-6.2s16.2,29,6.2,42.5S391,371.2,377.5,361.2z"/></g><circle cx="395.6" cy="336.8" id="XMLID_9_" r="19.5"/><g><path d="M452.3,287.5L428.8,270l20.3-23.9c2-2.4,5.6-2.8,8-1l11,8.2c2.4,1.8,3,5.3,1.3,7.9L452.3,287.5z" id="XMLID_8_"/><path d="M470.6,342l-4.3-29.1l31.2-2.5c3.1-0.3,5.9,2,6.4,4.9l2,13.6c0.4,3-1.6,5.9-4.7,6.5L470.6,342z" id="XMLID_7_"/><path d="M444.9,393.5l17.5-23.6l23.9,20.3c2.4,2,2.8,5.6,1,8l-8.2,11c-1.8,2.4-5.3,3-7.9,1.3L444.9,393.5z" id="XMLID_6_"/><path d="M390.4,411.8l29.1-4.3l2.5,31.2c0.3,3.1-2,5.9-4.9,6.4l-13.6,2c-3,0.4-5.9-1.6-6.5-4.7L390.4,411.8z" id="XMLID_5_"/><path d="M338.9,386.1l23.6,17.5l-20.3,23.9c-2,2.4-5.6,2.8-8,1l-11-8.2c-2.4-1.8-3-5.3-1.3-7.9L338.9,386.1z" id="XMLID_4_"/><path d="M320.6,331.6l4.3,29.1l-31.2,2.5c-3.1,0.3-5.9-2-6.4-4.9l-2-13.6c-0.4-3,1.6-5.9,4.7-6.5L320.6,331.6z" id="XMLID_3_"/><path d="M346.3,280.1l-17.5,23.6l-23.9-20.3c-2.4-2-2.8-5.6-1-8l8.2-11c1.8-2.4,5.3-3,7.9-1.3L346.3,280.1z" id="XMLID_2_"/><path d="M400.8,261.8l-29.1,4.3l-2.5-31.2c-0.3-3.1,2-5.9,4.9-6.4l13.6-2c3-0.4,5.9,1.6,6.5,4.7L400.8,261.8z" id="XMLID_1_"/></g>
+            <animateTransform attributeName="transform"
+            attributeType="XML"
+            type="rotate"
+            from="360 395.6 336.8"
+            to="0 395.6 336.8"
+            dur="2.5s"
+            repeatCount="indefinite"/>
+        </g>
+    </g>
+    </svg>
+    </div>
+    <div id="large-container" class="big-container-large-row">
+        <div id="conditionTextF" class="sensor-condition-text">Normal</div>
+        </div>
+        <div class="green-container-row">   	  
+            <div id="sensor-box1F" class="green-box">1</div>
+            <div id="sensor-box2F" class="green-box">2</div>
+            <div id="sensor-box3F" class="green-box">3</div>
+            <div id="sensor-box4F" class="green-box">4</div>
+        </div>
+    </div>
+
+    <div id="temperature-A" class="temperature-info-container">
+        <div id="temp-layoutA" class="temperature-circle">
+        <div id="temperatureA" class="temperature-value">20.1</div>
+        <div id="tempUnitA" class="unit">&degC</div>
+        </div>
+    </div>
+
+    <div id="temperature-B" class="temperature-info-container">
+        <div id="temp-layoutB" class="temperature-circle">
+        <div id="temperatureB" class="temperature-value">20.1</div>
+        <div id="tempUnitB" class="unit">&degC</div>
+        </div>
+    </div>
+
+    <div id="temperature-C" class="temperature-info-container">
+        <div id="temp-layoutC" class="temperature-circle">
+        <div id="temperatureC" class="temperature-value">20.1</div>
+        <div id="tempUnitC" class="unit">&degC</div>
+        </div>
+    </div>
+
+    <div id="temperature-D" class="temperature-info-container">
+        <div id="temp-layoutD" class="temperature-circle">
+        <div id="temperatureD" class="temperature-value">20.1</div>
+        <div id="tempUnitD" class="unit">&degC</div>
+        </div>
+    </div>
+
+    <div id="temperature-E" class="temperature-info-container">
+        <div id="temp-layoutE" class="temperature-circle">
+        <div id="temperatureE" class="temperature-value">20.1</div>
+        <div id="tempUnitE" class="unit">&degC</div>
+        </div>
+    </div>
+
+    <div id="temperature-F" class="temperature-info-container">
+        <div id="temp-layoutF" class="temperature-circle">
+        <div id="temperatureF" class="temperature-value">20.1</div>
+        <div id="tempUnitF" class="unit">&degC</div>
+        </div>
+    </div>
+        
+
+    <div id="pressure-A" class="temperature-info-container">
+        <div id="pressure-layoutA" class="temperature-circle">
+        <div id="pressureA" class="temperature-value">51.2</div>
+        <div id="pressure-unitA" class="unit">Pa</div>
+        </div>
+    </div>
+
+    <div id="pressure-B" class="temperature-info-container">
+        <div id="pressure-layoutB" class="temperature-circle">
+        <div id="pressureB" class="temperature-value">51.2</div>
+        <div id="pressure-unitB" class="unit">Pa</div>
+        </div>
+    </div>
+
+
+    <div id="pressure-C" class="temperature-info-container">
+        <div id="pressure-layoutC" class="temperature-circle">
+        <div id="pressureC" class="temperature-value">51.2</div>
+        <div id="pressure-unitC" class="unit">Pa</div>
+        </div>
+    </div>
+
+
+    <div id="pressure-D" class="temperature-info-container">
+        <div id="pressure-layoutD" class="temperature-circle">
+        <div id="pressureD" class="temperature-value">51.2</div>
+        <div id="pressure-unitD" class="unit">Pa</div>
+        </div>
+    </div>
+
+
+    <div id="pressure-E" class="temperature-info-container">
+        <div id="pressure-layoutE" class="temperature-circle">
+        <div id="pressureE" class="temperature-value">51.2</div>
+        <div id="pressure-unitE" class="unit">Pa</div>
+        </div>
+    </div>
+
+
+    <div id="pressure-F" class="temperature-info-container">
+        <div id="pressure-layoutF" class="temperature-circle">
+        <div id="pressureF" class="temperature-value">51.2</div>
+        <div id="pressure-unitF" class="unit">Pa</div>
+        </div>
+    </div>
+
+    <div id="textColorA" class="text-color">Temperature</div>
+    <div id="textColorB" class="text-color">Temperature</div>
+    <div id="textColorC" class="text-color">Temperature</div>
+    <div id="textColorD" class="text-color">Temperature</div>
+    <div id="textColorE" class="text-color">Temperature</div>
+    <div id="textColorF" class="text-color">Temperature</div>
+
+    <div id="pressureTextA" class="text-color">Pressure</div>
+    <div id="pressureTextB" class="text-color">Pressure</div>
+    <div id="pressureTextC" class="text-color">Pressure</div>
+    <div id="pressureTextD" class="text-color">Pressure</div>
+    <div id="pressureTextE" class="text-color">Pressure</div>
+    <div id="pressureTextF" class="text-color">Pressure</div>
+
+
+       
+</div>
+    
+    
+    <script src="./source/data.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="./source/stick.js"></script>
+    <script src="./source/condition.js"></script>
+    <script src="./source/alarm.js"></script>
+    <script src="./source/time.js"></script>
+    <script src="./source/border.js"></script>
+    <script src="./source/box.js"></script>
+    <script src="./source/pop.js"></script>
+    <script src="./source/chart.js"></script>
+    <script src="./source/pressure.js"></script>
+    <script src="./source/ripple.js"></script>
+    <script src="./source/temp.js"></script>
+    <script src="./source/text.js"></script>
+</body>
+</html>
