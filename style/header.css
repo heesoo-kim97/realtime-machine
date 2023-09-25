@@ -8,7 +8,8 @@
 body {
   background: #07152e;
   color: rgb(212, 204, 204);
-  
+  min-width: 1920px;
+  min-height: 1080px;
 }
 
 .monitoring-container {
@@ -27,7 +28,7 @@ body {
 
 .company-text {
   grid-area: 52 / 70 / 122 / 408;
-  font-size: 3rem;
+  font-size: 300%;
   color: #63d4ff;
 }
 
@@ -70,7 +71,7 @@ body {
  align-items: center;
  font-size: 40px;
  border: 1px solid #63d4ff;
- background: rgba(134, 183, 228, 0.1); 
+ background: rgba(134, 183, 228, 0.1);
  border-radius: 2%;
 }
 
